@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,229 +12,243 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'FFL Onboarding',
+      title: 'Gaming Welcome',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0D0D0D),
+        scaffoldBackgroundColor: const Color(0xFF090A0D),
       ),
-      home: const OnboardingScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.92, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final shortestSide = constraints.biggest.shortestSide;
-          final maxWidth = constraints.maxWidth;
-          final maxHeight = constraints.maxHeight;
-
-          final ringSize = shortestSide.clamp(260.0, 820.0);
-          final titleSize = shortestSide.clamp(30.0, 58.0);
-          final logoSize = shortestSide.clamp(120.0, 220.0);
-          final buttonWidth = (maxWidth * 0.42).clamp(220.0, 380.0);
-
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Container(color: const Color(0xFF171A20)),
+      body: Stack(
+        children: [
+          const Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF10131A), Color(0xFF07080C)],
+                ),
               ),
-
-              Center(
-                child: Container(
-                  width: ringSize * 0.62,
-                  height: ringSize * 0.62,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        Color(0x4DFF8A00),
-                        Color(0x0DFF8A00),
-                        Colors.transparent,
-                      ],
-                      stops: [0.0, 0.55, 1.0],
+            ),
+          ),
+          Positioned.fill(child: CustomPaint(painter: _GamingBackgroundPainter())),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  const Spacer(flex: 2),
+                  Text(
+                    'BIENVENIDO',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.orbitron(
+                      color: Colors.white,
+                      fontSize: 50,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2,
                     ),
                   ),
-                ),
-              ),
-
-              Center(
-                child: _Ring(size: ringSize, color: const Color(0x33F5A700), stroke: 1.4),
-              ),
-              Center(
-                child: _Ring(size: ringSize * 0.72, color: const Color(0x26F5A700), stroke: 1.2),
-              ),
-              Center(
-                child: _Ring(size: ringSize * 0.45, color: const Color(0x1FFFFFFF), stroke: 1.1),
-              ),
-
-              Positioned(
-                top: maxHeight * 0.18,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    Text(
-                      'BIENVENIDO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        fontSize: titleSize,
-                      ),
-                    ),
-                    Text(
+                  const SizedBox(height: 8),
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [Color(0xFFFF5F5F), Color(0xFF9F001D)],
+                    ).createShader(bounds),
+                    child: Text(
                       'AL JUEGO',
-                      style: TextStyle(
-                        color: const Color(0xFFAA1D3A),
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        fontSize: titleSize,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.orbitron(
+                        color: Colors.white,
+                        fontSize: 34,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 3,
                       ),
                     ),
-                  ],
-                ),
-              ),
-
-              Center(
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: logoSize,
-                  fit: BoxFit.contain,
-                ),
-              ),
-
-              Positioned(
-                left: 40,
-                top: maxHeight * 0.12,
-                child: _SlashLine(width: 280, color: const Color(0x33AA1D3A), angle: -0.29),
-              ),
-              Positioned(
-                right: 0,
-                top: maxHeight * 0.18,
-                child: _SlashLine(width: 290, color: const Color(0x40AA1D3A), angle: -0.28),
-              ),
-              Positioned(
-                left: maxWidth * 0.22,
-                bottom: maxHeight * 0.28,
-                child: _SlashLine(width: 340, color: const Color(0x33AA1D3A), angle: -0.42),
-              ),
-
-              Positioned(
-                left: 40,
-                right: 40,
-                bottom: maxHeight * 0.10,
-                child: Center(
-                  child: SizedBox(
-                    width: buttonWidth,
-                    height: 58,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF7E1530),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
+                  ),
+                  const SizedBox(height: 40),
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x99FF2E56),
+                              blurRadius: 36,
+                              spreadRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(
+                          'logo_app.png',
+                          width: 180,
+                          fit: BoxFit.contain,
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'EMPEZAR',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 4,
-                              fontSize: 22,
-                            ),
+                    ),
+                  ),
+                  const Spacer(flex: 3),
+                  SizedBox(
+                    width: 260,
+                    height: 56,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x662C0008),
+                            blurRadius: 18,
+                            offset: Offset(0, 8),
                           ),
-                          SizedBox(width: 18),
-                          Icon(Icons.arrow_forward, size: 28, color: Colors.white),
                         ],
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFB5122A), Color(0xFF6F0718)],
+                        ),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const HomeScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(
+                          'EMPEZAR →',
+                          style: GoogleFonts.orbitron(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 24),
+                ],
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _Ring extends StatelessWidget {
-  const _Ring({required this.size, required this.color, required this.stroke});
-
-  final double size;
-  final Color color;
-  final double stroke;
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: color, width: stroke),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: const Center(
+        child: Text('HomeScreen'),
       ),
     );
   }
 }
 
-class _SlashLine extends StatelessWidget {
-  const _SlashLine({required this.width, required this.color, required this.angle});
+class _GamingBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final linePaint = Paint()
+      ..color = const Color(0x22FFFFFF)
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke;
 
-  final double width;
-  final Color color;
-  final double angle;
+    final accentPaint = Paint()
+      ..color = const Color(0x30FF2E56)
+      ..strokeWidth = 1.4
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(
+      Offset(size.width * 0.18, size.height * 0.2),
+      size.width * 0.26,
+      linePaint,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.82, size.height * 0.78),
+      size.width * 0.32,
+      linePaint,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.5, size.height * 0.45),
+      size.width * 0.42,
+      accentPaint,
+    );
+
+    final path1 = Path()
+      ..moveTo(size.width * 0.05, size.height * 0.2)
+      ..lineTo(size.width * 0.95, size.height * 0.1)
+      ..lineTo(size.width * 0.85, size.height * 0.13);
+    canvas.drawPath(path1, accentPaint);
+
+    final path2 = Path()
+      ..moveTo(size.width * 0.1, size.height * 0.75)
+      ..lineTo(size.width * 0.9, size.height * 0.85)
+      ..lineTo(size.width * 0.8, size.height * 0.88);
+    canvas.drawPath(path2, linePaint);
+
+    final dotPaint = Paint()..color = const Color(0x33FF4D6D);
+    for (var i = 0; i < 18; i++) {
+      final dx = (size.width / 18) * i;
+      canvas.drawCircle(Offset(dx, size.height * 0.56), 1.5, dotPaint);
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: angle,
-      child: Container(
-        width: width,
-        height: 2,
-        color: color,
-      ),
-    );
-  }
-}
-                left: horizontalPadding,
-                right: horizontalPadding,
-                bottom: bottomInset,
-                child: SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC62828),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    child: const Text('EMPEZAR'),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
