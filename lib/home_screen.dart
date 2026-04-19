@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F2),
+      backgroundColor: const Color(0xFF0D0D0D),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -27,31 +27,31 @@ class HomeScreen extends StatelessWidget {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color(0xFF1A1A1A),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.image_outlined, color: Colors.black54),
+                    child: const Icon(Icons.image_outlined, color: Colors.white70),
                   ),
                   const Spacer(),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.dark_mode_outlined),
-                    color: Colors.black87,
+                    icon: const Icon(Icons.dark_mode),
+                    color: Colors.white70,
                   ),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.person_outline),
-                    color: Colors.black87,
+                    color: Colors.white70,
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Lo Destacado',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 10),
@@ -59,47 +59,57 @@ class HomeScreen extends StatelessWidget {
                 height: 150,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD6D6D6),
+                  color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Center(
-                  child: Icon(Icons.image, size: 58, color: Colors.black45),
+                  child: Icon(Icons.image, size: 58, color: Colors.white54),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'NOTICIAS',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                'Info',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.black54,
-                ),
+              Row(
+                children: [
+                  Text(
+                    'NOTICIAS',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Info',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFFE53935),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 18),
               Row(
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Posiciones',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
-                  Spacer(),
-                  Text(
-                    'Ver Más',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w600,
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Ver Más',
+                      style: TextStyle(
+                        color: Color(0xFFE53935),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -107,14 +117,14 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: Column(
                   children: [
                     const _StandingsHeader(),
-                    const Divider(height: 12),
+                    const Divider(height: 12, color: Colors.white24),
                     ...standings
                         .map(
                           (team) => Padding(
@@ -138,6 +148,9 @@ class HomeScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF1A1A1A),
+        selectedItemColor: const Color(0xFFE53935),
+        unselectedItemColor: Colors.white54,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Games'),
@@ -156,10 +169,10 @@ class _StandingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Row(
       children: [
-        Expanded(flex: 3, child: Text('EQUIPO', style: TextStyle(fontWeight: FontWeight.bold))),
-        Expanded(child: Text('G-P', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold))),
-        Expanded(child: Text('%', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold))),
-        Expanded(child: Text('DIF', textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold))),
+        Expanded(flex: 3, child: Text('EQUIPO', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
+        Expanded(child: Text('G-P', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
+        Expanded(child: Text('%', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
+        Expanded(child: Text('DIF', textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))),
       ],
     );
   }
@@ -182,11 +195,12 @@ class _StandingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 3, child: Text(team, style: const TextStyle(color: Colors.black87))),
-        Expanded(child: Text(gp, textAlign: TextAlign.center)),
-        Expanded(child: Text(pct, textAlign: TextAlign.center)),
-        Expanded(child: Text(diff, textAlign: TextAlign.end)),
+        Expanded(flex: 3, child: Text(team, style: const TextStyle(color: Colors.white70))),
+        Expanded(child: Text(gp, textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+        Expanded(child: Text(pct, textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+        Expanded(child: Text(diff, textAlign: TextAlign.end, style: TextStyle(color: Colors.white70))),
       ],
     );
   }
 }
+
