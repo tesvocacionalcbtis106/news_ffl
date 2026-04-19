@@ -11,10 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'FFL Onboarding',
+      title: 'News FFL',
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0D0D0D),
+        useMaterial3: true,
       ),
       home: const OnboardingScreen(),
     );
@@ -78,17 +79,17 @@ class OnboardingScreen extends StatelessWidget {
                 right: 0,
                 child: Column(
                   children: [
-                    Text(
-                      'BIENVENIDO',
+                    const Text(
+                      'NEWS',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
-                        fontSize: titleSize,
+                        fontSize: 48, // Scaled later
                       ),
                     ),
                     Text(
-                      'AL JUEGO',
+                      'FFL',
                       style: TextStyle(
                         color: const Color(0xFFAA1D3A),
                         fontWeight: FontWeight.w900,
@@ -102,9 +103,17 @@ class OnboardingScreen extends StatelessWidget {
 
               Center(
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  'logo_app.png',
                   width: logoSize,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: logoSize,
+                      height: logoSize,
+                      color: Colors.grey,
+                      child: const Icon(Icons.image_not_supported, color: Colors.white, size: 50),
+                    );
+                  },
                 ),
               ),
 
@@ -133,12 +142,18 @@ class OnboardingScreen extends StatelessWidget {
                     width: buttonWidth,
                     height: 58,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => const NewsScreen()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF7E1530),
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(8),
                         ),
+                        elevation: 8,
                       ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -148,12 +163,12 @@ class OnboardingScreen extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 4,
-                              fontSize: 22,
+                              letterSpacing: 2,
+                              fontSize: 20,
                             ),
                           ),
-                          SizedBox(width: 18),
-                          Icon(Icons.arrow_forward, size: 28, color: Colors.white),
+                          SizedBox(width: 12),
+                          Icon(Icons.arrow_forward_ios, size: 20, color: Colors.white),
                         ],
                       ),
                     ),
@@ -168,8 +183,89 @@ class OnboardingScreen extends StatelessWidget {
   }
 }
 
+class NewsScreen extends StatefulWidget {
+  const NewsScreen({super.key});
+
+  @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  final List<Map<String, String>> newsItems = [
+    {'title': 'Últimas noticias FFL 2024', 'subtitle': 'Temporada inicia con cambios importantes', 'image': 'logo_app.png'},
+    {'title': 'Equipo campeón confirmado', 'subtitle': 'Fantasy Football League domina', 'image': 'logo_app.png'},
+    {'title': 'Nuevos jugadores destacados', 'subtitle': 'Rookies que debes considerar', 'image': 'logo_app.png'},
+    {'title': 'Estrategias ganadoras', 'subtitle': 'Consejos para la semana 1', 'image': 'logo_app.png'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('News FFL'),
+        backgroundColor: const Color(0xFF171A20),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {}); // Simulate refresh
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: newsItems.length,
+        itemBuilder: (context, index) {
+          final item = newsItems[index];
+          return Card(
+            color: const Color(0xFF1E1E1E),
+            margin: const EdgeInsets.only(bottom: 16),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(16),
+              leading: Image.asset(
+                item['image']!,
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 60,
+                  height: 60,
+                  color: Colors.grey,
+                ),
+              ),
+              title: Text(
+                item['title']!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              subtitle: Text(
+                item['subtitle']!,
+                style: TextStyle(color: Colors.grey[400]),
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Abriendo noticia: ${item['title']}')),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class _Ring extends StatelessWidget {
-  const _Ring({required this.size, required this.color, required this.stroke});
+  const _Ring({
+    required this.size,
+    required this.color,
+    required this.stroke,
+  });
 
   final double size;
   final Color color;
@@ -189,7 +285,11 @@ class _Ring extends StatelessWidget {
 }
 
 class _SlashLine extends StatelessWidget {
-  const _SlashLine({required this.width, required this.color, required this.angle});
+  const _SlashLine({
+    required this.width,
+    required this.color,
+    required this.angle,
+  });
 
   final double width;
   final Color color;
@@ -207,33 +307,4 @@ class _SlashLine extends StatelessWidget {
     );
   }
 }
-                left: horizontalPadding,
-                right: horizontalPadding,
-                bottom: bottomInset,
-                child: SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC62828),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    child: const Text('EMPEZAR'),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
+
