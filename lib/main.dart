@@ -207,3 +207,33 @@ class _SlashLine extends StatelessWidget {
     );
   }
 }
+                left: horizontalPadding,
+                right: horizontalPadding,
+                bottom: bottomInset,
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC62828),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    child: const Text('EMPEZAR'),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
