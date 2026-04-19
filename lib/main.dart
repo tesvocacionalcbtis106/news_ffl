@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -147,7 +149,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   width: buttonWidth,
                   height: 58,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7E1530),
                       shape: RoundedRectangleBorder(
