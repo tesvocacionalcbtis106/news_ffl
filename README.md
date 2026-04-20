@@ -1,16 +1,39 @@
 # news_ffl
 
-A new Flutter project.
+Base de app para FFL (Flag Football League).
 
-## Getting Started
+## Stack definido (fijo)
 
-This project is a starting point for a Flutter application.
+- **Frontend:** Flutter
+- **Backend / servicios:** Firebase (Auth, Firestore, Storage y Cloud Functions)
 
-A few resources to get you started if this is your first Flutter project:
+> Este stack queda definido desde esta fase para construir pantallas y módulos sobre la misma base.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Estructura modular
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```text
+lib/
+  modules/
+    home/
+    games/
+    jornadas/
+    jugadores/
+    equipos/
+    auth/
+    admin/
+    arbitro/
+  shared/
+    navigation/
+    theme/
+    widgets/
+```
+
+## Navegación inicial
+
+La navegación principal está lista con rutas para:
+
+- Home
+- Juegos
+- Jugadores
+- Equipos
+- Login
